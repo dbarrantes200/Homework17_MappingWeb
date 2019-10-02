@@ -1,6 +1,6 @@
 // Store our API endpoint inside queryUrl
-//var queryUrl = "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_week.geojson";
-var queryUrl = "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_day.geojson"
+var queryUrl = "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_week.geojson";
+//var queryUrl = "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_day.geojson"
 // Perform a GET request to the query URL
 d3.json(queryUrl, function(data) {
 
@@ -15,7 +15,7 @@ var legend = L.control({position: 'bottomright'});
 legend.onAdd = function () {
 
     var div = L.DomUtil.create('div', 'info legend'),
-        grades = [0, 1,2,3,4,5],
+        grades = [0,1,2,3,4,5,6],
         labels = [];
 
     //Create a loop o go through the density intervals and generate labels
@@ -35,21 +35,24 @@ legend.onAdd = function () {
 function getColor(c)
 {
   x = Math.round(c);
+    
   switch (x) {
     case 0:
-      return "darkgreen";
+      return "#80ff00";
     case 1:
-      return "blue";
+      return "#bfff00";
     case 2:
-      return "lightgreen";
+      return "#ffe699";
     case 3:
-      return "yellow";
+      return "#ffff00";
     case 4:
-      return "orange";
+      return "#ffbf00";
     case 5:
-      return "red";
+      return "#ff8000";
+    case 6:
+      return "red";  
     default:
-      return "black";
+      return "white";
   }
 }
 
@@ -58,7 +61,7 @@ function createFeatures(earthquakeData) {
   var earthquakes = L.geoJson(earthquakeData,{
     pointToLayer: function (feature, latlng) {
       return L.circleMarker(latlng, {
-        radius: feature.properties.mag*5,
+        radius: feature.properties.mag*4,
         fillColor: getColor(feature.properties.mag),
         color: "#000",
         weight: 1,
@@ -106,7 +109,7 @@ function createMap(earthquakes) {
   var myMap = L.map("map", {
     //center: [ 34.052235, -118.243683],
     center: [34.75, -111.87],
-    zoom: 4,
+    zoom: 5,
     layers: [lightmap, earthquakes]
   });
     console.log(myMap);
